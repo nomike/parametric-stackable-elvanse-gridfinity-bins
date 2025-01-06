@@ -1,3 +1,6 @@
 [submodule "openscad_stl_file_generator"]
 	path = openscad_stl_file_generator
 	url = https://github.com/nomike/openscad_stl_file_generator
+[submodule "gridfinity-rebuilt-openscad"]
+	path = gridfinity-rebuilt-openscad
+	url = https://github.com/kennetek/gridfinity-rebuilt-openscad
