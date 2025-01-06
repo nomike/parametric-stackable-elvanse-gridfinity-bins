@@ -1,0 +1,37 @@
+{
+    "fileFormatVersion": "1",
+    "parameterSets": {
+        "stackable\/1x1": {
+            "$fa": "8",
+            "$fs": "0.25",
+            "c_chamfer": "0.5",
+            "c_depth": "1",
+            "c_fillet_radius": "4",
+            "c_orientation": "2",
+            "cd": "37.200000000000003",
+            "ch": "63",
+            "chamfer_holes": "true",
+            "crush_ribs": "true",
+            "cutout_width": "17.5",
+            "divx": "0",
+            "divy": "0",
+            "enable_thumbscrew": "false",
+            "enable_zsnap": "false",
+            "epsilon": "0.01",
+            "gridx": "1",
+            "gridy": "1",
+            "gridz": "10",
+            "gridz_define": "0",
+            "height_internal": "0",
+            "magnet_holes": "false",
+            "only_corners": "false",
+            "place_tab": "0",
+            "printable_hole_top": "true",
+            "refined_holes": "true",
+            "scoop": "0",
+            "screw_holes": "false",
+            "style_lip": "0",
+            "style_tab": "0"
+        }
+    }
+}
