@@ -14,7 +14,7 @@ gridx = 1;
 // number of bases along y-axis
 gridy = 1;
 // bin height. See bin height information and "gridz_define" below.
-gridz = 10; //.1
+gridz = 64; //.1
 
 /* [Linear Compartments] */
 // number of X Divisions (set to zero to have solid bin)
@@ -30,9 +30,9 @@ cdivy = gridy;
 // orientation
 c_orientation = 2; // [0: x direction, 1: y direction, 2: z direction]
 // diameter of cylindrical cut outs
-cd = 37.2; // .1
+cd = 37.7; // .1
 // cylinder height
-ch = 63;  //.1
+ch = 84;  //.1
 // spacing to lid
 c_depth = 1;
 // chamfer around the top rim of the holes
@@ -41,11 +41,11 @@ c_fillet_radius = 4; // .1
 
 /* [Height] */
 // determine what the variable "gridz" applies to based on your use case
-gridz_define = 0; // [0:gridz is the height of bins in units of 7mm increments - Zack's method,1:gridz is the internal height in millimeters, 2:gridz is the overall external height of the bin in millimeters]
+gridz_define = 1; // [0:gridz is the height of bins in units of 7mm increments - Zack's method,1:gridz is the internal height in millimeters, 2:gridz is the overall external height of the bin in millimeters]
 // overrides internal block height of bin (for solid containers). Leave zero for default height. Units: mm
 height_internal = 0;
 // snap gridz height to nearest 7mm increment
-enable_zsnap = false;
+enable_zsnap = true;
 
 /* [Features] */
 // the type of tabs
@@ -79,11 +79,15 @@ hole_options = bundle_hole_options(refined_holes, magnet_holes, screw_holes, cru
 
 cutout_width = 17.5; // .1
 
-module cutout(cutout_width, gridz) {
+/* [Hidden] */
+base_height = 6.95;
+lip_height = 4.55;
+
+module cutout(cutout_width) {
     translate([-GRID_DIMENSIONS_MM[0]/2, -cutout_width/2, 0])
-    cube([GRID_DIMENSIONS_MM[0] + 2 * epsilon, cutout_width, height(gridz + 2, gridz_define, style_lip, enable_zsnap)]);
+    cube([GRID_DIMENSIONS_MM[0], cutout_width, height(gridz, gridz_define, style_lip, enable_zsnap) + epsilon + lip_height]);
     translate([-cutout_width/2, -GRID_DIMENSIONS_MM[1]/2, 0])
-    cube([cutout_width, GRID_DIMENSIONS_MM[1] + 2 * epsilon, height(gridz + 2, gridz_define, style_lip, enable_zsnap)]);
+    cube([cutout_width, GRID_DIMENSIONS_MM[1], height(gridz, gridz_define, style_lip, enable_zsnap) + epsilon + lip_height]);
 }
 
 x_offset = ((gridx % 2) ? 0 : GRID_DIMENSIONS_MM[0] / 2) - floor(gridx / 2) * GRID_DIMENSIONS_MM[0];
@@ -108,21 +112,27 @@ color("Tomato") difference() {
             gridfinityBase([gridx, gridy], hole_options=hole_options, only_corners=only_corners, thumbscrew=enable_thumbscrew);
         }
         
-        translate([x_offset, y_offset, BASE_HEIGHT  + 2.25]) union() {
-            for (j = [0:gridy-1])
-                for (i = [0:gridx-1])
-                    translate([i*GRID_DIMENSIONS_MM[0] - epsilon, j*GRID_DIMENSIONS_MM[1] - epsilon, 0])
+        // fillet
+        color("Tomato") translate([x_offset, y_offset, base_height]) union() {
+            for (j = [0:gridy-1]) {
+                for (i = [0:gridx-1]) {
+                    translate([i*GRID_DIMENSIONS_MM[0] - epsilon, j*GRID_DIMENSIONS_MM[1] - epsilon, 0]) {
                         difference() {
                             rotate_extrude(convexity = 10)
                             translate([(cd / 2) - c_fillet_radius, 0, 0]) square([c_fillet_radius, c_fillet_radius]);
                             rotate_extrude(convexity = 10)
-                            translate([cd / 2 - c_fillet_radius, c_fillet_radius, 0]) circle(r=c_fillet_radius);
+                            translate([cd / 2 - c_fillet_radius, c_fillet_radius, epsilon]) circle(r=c_fillet_radius);
                         }
+                    }
+                }
+            }
         }
     }
-    translate([x_offset, y_offset, BASE_HEIGHT + epsilon + 2.25]) union() {
+
+    // cutout
+    color("Turquoise") translate([x_offset, y_offset, base_height + epsilon]) union() {
         for (j = [0:gridy-1])
             for (i = [0:gridx-1])
-                translate([i*GRID_DIMENSIONS_MM[0] - epsilon, j*GRID_DIMENSIONS_MM[1] - epsilon, 0]) cutout(cutout_width, gridz);
+                translate([i*GRID_DIMENSIONS_MM[0] - epsilon, j*GRID_DIMENSIONS_MM[1] - epsilon, 0]) cutout(cutout_width);
     }
 }
