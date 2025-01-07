@@ -84,10 +84,10 @@ base_height = 6.95;
 lip_height = 4.55;
 
 module cutout(cutout_width) {
-    translate([-GRID_DIMENSIONS_MM[0]/2, -cutout_width/2, 0])
-    cube([GRID_DIMENSIONS_MM[0], cutout_width, height(gridz, gridz_define, style_lip, enable_zsnap) + epsilon + lip_height]);
-    translate([-cutout_width/2, -GRID_DIMENSIONS_MM[1]/2, 0])
-    cube([cutout_width, GRID_DIMENSIONS_MM[1], height(gridz, gridz_define, style_lip, enable_zsnap) + epsilon + lip_height]);
+    translate([-GRID_DIMENSIONS_MM[0]/2 - epsilon, -cutout_width/2, 0])
+    cube([GRID_DIMENSIONS_MM[0] + (2 * epsilon), cutout_width, height(gridz, gridz_define, style_lip, enable_zsnap) + epsilon + lip_height]);
+    translate([-cutout_width/2, -GRID_DIMENSIONS_MM[1]/2 - epsilon, 0])
+    cube([cutout_width, GRID_DIMENSIONS_MM[1] + (2 * epsilon), height(gridz, gridz_define, style_lip, enable_zsnap) + epsilon + lip_height]);
 }
 
 x_offset = ((gridx % 2) ? 0 : GRID_DIMENSIONS_MM[0] / 2) - floor(gridx / 2) * GRID_DIMENSIONS_MM[0];
@@ -133,6 +133,6 @@ difference() {
     color("Turquoise") translate([x_offset, y_offset, base_height + epsilon]) union() {
         for (j = [0:gridy-1])
             for (i = [0:gridx-1])
-                translate([i*GRID_DIMENSIONS_MM[0] - epsilon, j*GRID_DIMENSIONS_MM[1] - epsilon, 0]) cutout(cutout_width);
+                translate([i*GRID_DIMENSIONS_MM[0], j*GRID_DIMENSIONS_MM[1], 0]) cutout(cutout_width);
     }
 }
