@@ -95,7 +95,7 @@ y_offset = ((gridy % 2) ? 0 : GRID_DIMENSIONS_MM[1] / 2) - floor(gridy / 2) * GR
 
 
 // ===== IMPLEMENTATION ===== //
-color("Tomato") difference() {
+difference() {
     union() {
         union() {
             gridfinityInit(gridx, gridy, height(gridz, gridz_define, style_lip, enable_zsnap), height_internal, sl=style_lip) {
