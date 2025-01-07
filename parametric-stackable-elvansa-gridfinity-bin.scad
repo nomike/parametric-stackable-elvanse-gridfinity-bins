@@ -6,7 +6,7 @@ include <gridfinity-rebuilt-openscad/src/core/standard.scad>
 
 /* [Setup Parameters] */
 $fn = 128;
-epsilon = 0.01;
+epsilon = 0.001;
 
 /* [General Settings] */
 // number of bases along x-axis
