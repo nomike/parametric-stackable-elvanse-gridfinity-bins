@@ -5,8 +5,7 @@ include <gridfinity-rebuilt-openscad/src/core/standard.scad>
 // ===== PARAMETERS ===== //
 
 /* [Setup Parameters] */
-$fa = 8;
-$fs = 0.25; // .01
+$fn = 128;
 epsilon = 0.01;
 
 /* [General Settings] */
